@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    // "target": "es2017",
+    "allowJs": true,
+    "module": "commonJS",
+    "skipLibCheck": true,
+    "jsx": "react",
+    "esModuleInterop": true,
+    "noImplicitAny": true,
+    "sourceMap": true,
+    "baseUrl": ".",
+    "outDir": "build",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "paths": {
+      "*": ["node_modules/*"]
+    },
+  },
+  "include": ["client/**/*", "__tests__"]
+}
