@@ -17,8 +17,10 @@ const algorithmController: AlgorithmController = {
       const userID = req.params.user;
       console.log(userID);
       const SQLQuery = `
-      SELECT * FROM "public.UserAlgorithms"
-      WHERE user_id=$1;
+        SELECT * from "public.UserAlgorithms" as useralgos
+        JOIN "public.Algorithms" as algos 
+        ON useralgos.algo_id = algos.algo_id
+        WHERE user_id=$1
       `;
       console.log(SQLQuery);
       const response = await db.query(SQLQuery, [userID]);
