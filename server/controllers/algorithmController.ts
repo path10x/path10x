@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction, RequestHandler } from 'express';
 const db = require('../models/AlgorithmModel.ts');
 
 interface ExpressMiddleware {
@@ -7,14 +7,20 @@ interface ExpressMiddleware {
   next: NextFunction;
 }
 
-export const algorithmController = {
-  getUserAlgorithms: async ({ req, res, next }: ExpressMiddleware) => {
+type AlgorithmController = {
+  getUserAlgorithms: RequestHandler;
+};
+
+const algorithmController: AlgorithmController = {
+  getUserAlgorithms: async (req, res, next) => {
     try {
       const userID = req.params.user;
+      console.log(userID);
       const SQLQuery = `
-      GET * FROM "public.UserAlgorithms"
-      WHERE user_id=$1
+      SELECT * FROM "public.UserAlgorithms"
+      WHERE user_id=$1;
       `;
+      console.log(SQLQuery);
       const response = await db.query(SQLQuery, [userID]);
       res.locals = response.rows;
       return next();
@@ -27,3 +33,5 @@ export const algorithmController = {
     }
   },
 };
+
+module.exports = algorithmController;

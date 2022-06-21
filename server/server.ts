@@ -2,9 +2,13 @@ import express, { Request, Response, NextFunction } from 'express';
 const path = require('path');
 const app = express();
 const port = 8080;
+const apiRouter = require('./routes/api');
 
 app.use(express.json());
 app.use(express.urlencoded());
+
+app.use('/api/', apiRouter);
+
 app.get('/', (req: Request, res: Response) => {
   return res
     .status(200)
@@ -12,7 +16,7 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 //GLOBAL ERROR HANDLER
-app.use((err, req: Request, res: Response, next: NextFunction) => {
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   const defaultErr = {
     log: 'Error from global error handler',
     status: 400,
