@@ -3,7 +3,6 @@ const path = require('path');
 const app = express();
 const port = 8080;
 
-
 app.use(express.json())
 app.use(express.urlencoded())
 app.get('/', ((req: Request, res: Response) => {
@@ -20,6 +19,7 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   const errorObj = Object.assign({}, defaultErr, err);
   return res.status(errorObj.status).json(errorObj.message);
 });
+
 
 app.listen(port, () => {
   console.log(`listening on port ${port}`)
