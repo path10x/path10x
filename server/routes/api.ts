@@ -2,6 +2,7 @@
 import express, { Request, Response } from 'express';
 const router = express.Router();
 const algorithmController = require('../controllers/algorithmController');
+const userController = require('../controllers/userController');
 
 // GET all algorithms with user info attached
 router.get(
@@ -11,6 +12,20 @@ router.get(
     return res.status(200).json(res.locals);
   }
 );
+
+router.get(
+  '/user/:user',
+  userController.getUser,
+  (req: Request, res: Response) => {
+    return res.status(200).json(res.locals);
+  }
+);
+
+// );
+// algorithmController.getUserAlgorithms,
+// (req: Request, res: Response) => {
+//   return res.status(200).json(res.locals);
+// }
 
 // GET user account info
 // router.get('/userInfo/:user', (req: Request, res: Response) => {
