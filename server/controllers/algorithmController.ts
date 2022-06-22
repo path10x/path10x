@@ -15,16 +15,19 @@ const algorithmController: AlgorithmController = {
   getUserAlgorithms: async (req, res, next) => {
     try {
       const userID = req.params.user;
-      console.log(userID);
       const SQLQuery = `
-        SELECT * from "public.UserAlgorithms" as useralgos
+        SELECT *, company.name as company_name, algos.name as algorithm_name from "public.UserAlgorithms" as useralgos
         JOIN "public.Algorithms" as algos 
-        ON useralgos.algo_id = algos.algo_id
+          ON useralgos.algo_id = algos.algo_id
+        JOIN "public.CompanyAlgorithms" as companyalgos
+          ON algos.algo_id = companyalgos.algo_id
+        JOIN "public.Companies" as company
+          ON companyalgos.company_id = company.company_id
         WHERE user_id=$1
       `;
-      console.log(SQLQuery);
       const response = await db.query(SQLQuery, [userID]);
       res.locals = response.rows;
+      console.log(res.locals);
       return next();
     } catch (err) {
       return next({
@@ -37,3 +40,17 @@ const algorithmController: AlgorithmController = {
 };
 
 module.exports = algorithmController;
+
+// SELECT * from "public.UserAlgorithms" as useralgos
+// JOIN "public.Algorithms" as algos
+// ON useralgos.algo_id = algos.algo_id
+// JOIN "public.CompanyAlgorithms" as companyalgos
+// ON algos.algo_id = companyalgos.algo_id
+// JOIN "public.Companies" as company
+// ON companyalgos.company_id = company.company_id
+// WHERE user_id=1
+
+// SELECT * from "public.UserAlgorithms" as useralgos
+//         JOIN "public.Algorithms" as algos
+//         ON useralgos.algo_id = algos.algo_id
+//         WHERE user_id=$1
