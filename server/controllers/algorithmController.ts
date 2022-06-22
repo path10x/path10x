@@ -26,8 +26,41 @@ const algorithmController: AlgorithmController = {
         WHERE user_id=$1
       `;
       const response = await db.query(SQLQuery, [userID]);
-      res.locals = response.rows;
-      console.log(res.locals);
+
+      const responseReducer = (response: any) => {
+        // object to store algo_id:arrayOfCompanies. To be inserted into reduced object
+        const algoCompanyList: any = {};
+
+        // turn large list into just single object per algorithm while filling out company arrays
+        const reducedResponseMinusCompanyList = response.rows.reduce(
+          (acc: any, curr: any) => {
+            // add algo object if not in result
+            if (!(curr.algo_id in acc)) acc[curr.algo_id] = curr;
+            // add company array if not in algoCompanyList
+            if (!(curr.algo_id in algoCompanyList))
+              algoCompanyList[curr.algo_id] = [curr.company_name];
+            else algoCompanyList[curr.algo_id].push(curr.company_name);
+
+            return acc;
+          },
+          {}
+        );
+
+        const algoList: Object[] = [];
+        for (const key in reducedResponseMinusCompanyList) {
+          // delete company name, company id property
+          delete reducedResponseMinusCompanyList[key].company_name;
+          delete reducedResponseMinusCompanyList[key].company_id;
+          // add company arrays to each algorithm
+          reducedResponseMinusCompanyList[key].companies =
+            algoCompanyList[reducedResponseMinusCompanyList[key].algo_id];
+          algoList.push(reducedResponseMinusCompanyList[key]);
+        }
+
+        return algoList;
+      };
+
+      res.locals = responseReducer(response);
       return next();
     } catch (err) {
       return next({
