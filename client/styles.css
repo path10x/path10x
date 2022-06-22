@@ -1,0 +1,27 @@
+#root {
+  background-color: #2D3436
+  /* display: inline; */
+}
+
+#main {
+  /* display: inline; */
+  display: flex;
+  flex-direction: row;
+}
+
+#profile {
+  width: 100%;
+  height: 100%;
+}
+
+#radar {
+  width: 100%;
+  height: 700px;
+  color: white;
+}
+
+/* #radar text {
+  color: white;
+} */
+
+
