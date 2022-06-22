@@ -1,0 +1,17 @@
+#root {
+  background-color: darkgrey;
+  /* display: inline; */
+}
+
+#main {
+  /* display: inline; */
+  display: flex;
+  flex-direction: row;
+}
+
+/* #profile {
+  d
+}
+
+
+ */

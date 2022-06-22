@@ -5,6 +5,9 @@ const port = 8080;
 
 app.use(express.json())
 app.use(express.urlencoded())
+
+app.use(express.static(__dirname + '/public'));
+
 app.get('/', ((req: Request, res: Response) => {
   return res.status(200).sendFile(path.resolve(__dirname, '../build/index.html'))
 }))
