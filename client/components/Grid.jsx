@@ -5,10 +5,15 @@ import { AgGridReact } from 'ag-grid-react'; // the AG Grid React Component
 import 'ag-grid-community/dist/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/dist/styles/ag-theme-balham-dark.css'; // Optional theme CSS
 
+import Modal from './Modal'
+
 const Grid = () => {
 
  const gridRef = useRef(); // Optional - for accessing Grid's API
  const [rowData, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
+
+ // modal state
+ const [modalShow, setModalShow] = useState(false);
 
  // Each Column Definition results in one Column.
  const [columnDefs, setColumnDefs] = useState([
@@ -26,6 +31,7 @@ const defaultColDef = useMemo( ()=> ({
 
  // Example of consuming Grid Event
  const cellClickedListener = useCallback( (event) => { 
+  //const [modalShow, setModalShow] = useState(false);
   console.log('cellClicked', event);
  }, []);
 
@@ -44,14 +50,15 @@ const defaultColDef = useMemo( ()=> ({
  }, []);
 
  return (
-   <div>
+   <div id="grid">
 
      {/* Example using Grid's API */}
      {/*<button onClick={buttonListener}>Push Me</button> */}
 
      {/* On div wrapping Grid a) specify theme CSS Class Class and b) sets Grid size */}
-     <div className="ag-theme-balham-dark" style={{width: 1050, height: 500}}>
-
+     {/*<myModal show={modalShow} onHide={() => setModalShow(false)} />*/}
+     <div className="ag-theme-balham-dark" style={{width: 1050, height: 700}}>
+     
         <AgGridReact
            ref={gridRef} // Ref for accessing Grid's API
 
@@ -64,6 +71,7 @@ const defaultColDef = useMemo( ()=> ({
            rowSelection='multiple' // Options - allows click selection of rows
 
            onCellClicked={cellClickedListener} // Optional - registering for Grid Event
+
         />
      </div>
    </div>

@@ -1,5 +1,4 @@
 import React from 'react';
-import User from './components/User';
 import Main from './components/Main';
 import Navbar from './components/Navbar'
 
@@ -8,7 +7,6 @@ function App() {
     <>
     <Navbar />
     <Main />
-    <User />
     </>
   )
 }
