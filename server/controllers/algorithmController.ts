@@ -48,9 +48,10 @@ const algorithmController: AlgorithmController = {
 
         const algoList: Object[] = [];
         for (const key in reducedResponseMinusCompanyList) {
-          // delete company name, company id property
+          // delete company name, company id, and name property property
           delete reducedResponseMinusCompanyList[key].company_name;
           delete reducedResponseMinusCompanyList[key].company_id;
+          delete reducedResponseMinusCompanyList[key].name;
           // add company arrays to each algorithm
           reducedResponseMinusCompanyList[key].companies =
             algoCompanyList[reducedResponseMinusCompanyList[key].algo_id];
