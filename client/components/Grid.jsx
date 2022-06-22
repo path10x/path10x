@@ -9,7 +9,7 @@ import Modal from './Modal'
 
 const Grid = () => {
 
- const gridRef = useRef(); // Optional - for accessing Grid's API
+ const gridRef = useRef(null); // Optional - for accessing Grid's API
  const [rowData, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
 
  // modal state
@@ -17,27 +17,50 @@ const Grid = () => {
 
  // Each Column Definition results in one Column.
  const [columnDefs, setColumnDefs] = useState([
-   {field: 'Algo', filter: true},
-   {field: 'Status', filter: true},
-   {field: 'Category', filter: true},
-   {field: 'Difficulty', filter: true},
-   {field: 'Companies', filter: true}
+   {field: 'algorithm_name', headerName: 'Algo', filter: true},
+   {field: 'completed', headerName: 'Completed', filter: true,
+    cellRenderer : ({ value: completed}) => {
+      return completed ? 'Completed' : '';
+    }
+  },
+   {field: 'category', headerName: 'Category', filter: true},
+   {field: 'difficulty', headerName:'Difficulty', filter: true, cellRenderer : ({ value: difficulty}) => {
+    // capitalize letter... thanks SQL
+    return difficulty[0].toUpperCase().concat(difficulty.slice(1))
+  }},
+   {field: 'companies', headerName: 'Companies', filter: true}
  ]);
 
  // DefaultColDef sets props common to all Columns
 const defaultColDef = useMemo( ()=> ({
-  sortable: true
+  sortable: true,
+  resizable: true
 }));
 
  // Example of consuming Grid Event
  const cellClickedListener = useCallback( (event) => { 
-  //const [modalShow, setModalShow] = useState(false);
   console.log('cellClicked', event);
  }, []);
 
+ const onGridReady = (params) => {
+  const { api, columnApi } = gridRef.current;
+  if (api === null || columnApi === null) {
+    return;
+  }
+  params.api.sizeColumnsToFit();
+};
+
+const onGridSizeChanged = (params) => {
+  const { api, columnApi } = gridRef.current;
+  if (api === null || columnApi === null) {
+    return;
+  }
+  params.api.sizeColumnsToFit();
+};
+
  // Example load data from sever
  useEffect(() => {
-   fetch('https://www.ag-grid.com/example-assets/row-data.json')
+   fetch('/api/userAlgorithms/1')
    .then(result => result.json())
    .then(rowData => setRowData(rowData))
  }, []);
@@ -71,7 +94,8 @@ const defaultColDef = useMemo( ()=> ({
            rowSelection='multiple' // Options - allows click selection of rows
 
            onCellClicked={cellClickedListener} // Optional - registering for Grid Event
-
+           onGridReady={onGridReady}
+           onGridSizeChanged={onGridSizeChanged}
         />
      </div>
    </div>

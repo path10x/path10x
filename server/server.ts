@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 const path = require('path');
 const app = express();
-const port = 8080;
+const port = 3000;
 const apiRouter = require('./routes/api');
 
 app.use(express.json())
